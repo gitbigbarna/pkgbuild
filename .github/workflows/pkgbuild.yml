@@ -70,6 +70,10 @@ jobs:
           find -iname *$i -exec gh release upload ${release} --repo ${GITHUB_REPOSITORY} --clobber {} \;
           done
           
+      ## Tmate ##
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+          
       - name: prepare upload
         shell: bash
         run: |
