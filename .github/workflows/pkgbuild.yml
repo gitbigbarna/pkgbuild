@@ -30,7 +30,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      - name: echo PayLoad
+      - name: echo PayLoads
         run: 'echo "${{ github.event.client_payload.url }}"'
 
       - name: Makepkg Build and Check
@@ -44,14 +44,14 @@ jobs:
           gpg-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.PASSPHRASE }}
     
-      - name: Create local changes
-        run: git add pkgbuild/PKGBUILD
+      #- name: Create local changes
+      #  run: git add pkgbuild/PKGBUILD
         
-      - name: Commit files
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "pkgrel+1" -a
+      #- name: Commit files
+      #  run: |
+      #    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #    git config --local user.name "github-actions[bot]"
+      #    git commit -m "pkgrel+1" -a
           
       - name: Push changes
         uses: ad-m/github-push-action@master
