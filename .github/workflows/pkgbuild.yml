@@ -30,7 +30,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      - name: json
+      - name: echo PayLoad
         run: 'echo "${{ github.event.client_payload.url }}"'
 
       - name: Makepkg Build and Check
