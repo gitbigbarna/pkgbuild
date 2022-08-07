@@ -33,8 +33,8 @@ jobs:
         # You may pin to the exact commit or the version.
         uses: gitbigbarna/pkg-action@main
         env:
-          name: $(echo ${{ github.event.client_payload.url }} | rev | cut -d "/" -f1 | rev)
-        run: echo "Name: ${{ env.name }}"
+          nome: $(echo ${{ github.event.client_payload.url }} | rev | cut -d "/" -f1 | rev)
+        run: echo "Nome: ${{ env.nome }}"
         with:
           package: ${{ env.name }}
           packge_extra: ${{ github.event.client_payload.pkgbuild }}
