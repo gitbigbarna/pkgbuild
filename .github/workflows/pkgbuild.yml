@@ -26,13 +26,14 @@ jobs:
         run: |
           echo "url: ${{ github.event.client_payload.url }}"
           echo "branch: ${{ github.event.client_payload.branch }}"
+          echo "pkgbuild_folder: ${{ github.event.client_payload.pkgbuild }}"
 
       - name: Makepkg Build and Check
         id: makepkg
         # You may pin to the exact commit or the version.
         uses: gitbigbarna/pkg-action@main
         with:
-          package: pkgbuild
+          package: ${{ github.event.client_payload.pkgbuild }}
           branch: stable
           gpg-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.PASSPHRASE }}
