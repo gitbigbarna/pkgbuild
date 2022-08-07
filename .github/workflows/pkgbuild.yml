@@ -51,8 +51,10 @@ jobs:
           gh release create ${release} --title ${release} --repo gitbigbarna/pkgbuild --notes "automated release" || echo "release already exists"
           #GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${release}
           GITHUB_LINK=https://github.com/gitbigbarna/pkgbuild/releases/download/${release}
-          echo GITHUB_LINK=https://github.com/gitbigbarna/pkgbuild/releases/download/${release}
-          echo "GITHUB_LINK=https://github.com/gitbigbarna/pkgbuild/releases/download/${release}"
+          echo biglinux
+          echo "biglinux"
+          echo 'biglinux'
+          echo 'GITHUB_LINK=https://github.com/gitbigbarna/pkgbuild/releases/download/'"${release}"
           for i in .zst .sig .tar; do
           #find -iname *$i -exec gh release upload ${release} --repo ${GITHUB_REPOSITORY} --clobber {} \;
           find -iname *$i -exec gh release upload ${release} --repo gitbigbarna/pkgbuild --clobber {} \;
