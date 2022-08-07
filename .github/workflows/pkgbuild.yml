@@ -24,8 +24,8 @@ jobs:
       
       - name: echo PayLoads
         run: |
-        'echo "url: ${{ github.event.client_payload.url }}"'
-        'echo "branch: ${{ github.event.client_payload.branch }}"'
+          'echo "url: ${{ github.event.client_payload.url }}"'
+          'echo "branch: ${{ github.event.client_payload.branch }}"'
 
       - name: Makepkg Build and Check
         id: makepkg
