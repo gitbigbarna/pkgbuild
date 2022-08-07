@@ -26,18 +26,12 @@ jobs:
         run: |
           echo "url: ${{ github.event.client_payload.url }}"
           echo "branch: ${{ github.event.client_payload.branch }}"
-          echo "pkgbuild_folder: ${{ github.event.client_payload.pkgbuild }}"
-
       - name: Makepkg Build and Check
         id: makepkg
         # You may pin to the exact commit or the version.
         uses: gitbigbarna/pkg-action@main
-        env:
-          nome: $(echo ${{ github.event.client_payload.url }} | rev | cut -d "/" -f1 | rev)
-          
         with:
-          package: ${{ env.nome }}
-          packge_extra: ${{ github.event.client_payload.pkgbuild }}
+          package: pkgbuild
           branch: stable
           gpg-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.PASSPHRASE }}
@@ -45,19 +39,12 @@ jobs:
       - name: Publish Package
         shell: bash -O extglob {0}
         run: |
-          echo "release=$(find . -name *.zst | cut -d "/" -f2)"
           release=$(find . -name *.zst | cut -d "/" -f2)
-          #gh release create ${release} --title ${release} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
-          gh release create ${release} --title ${release} --repo gitbigbarna/pkgbuild --notes "automated release" || echo "release already exists"
-          #GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${release}
-          GITHUB_LINK=https://github.com/gitbigbarna/pkgbuild/releases/download/${release}
-          echo biglinux
-          echo "biglinux"
-          echo 'biglinux'
-          echo 'GITHUB_LINK=https://github.com/gitbigbarna/pkgbuild/releases/download/'"${release}"
+          echo ${{ github.token }} | gh auth login --with-token
+          gh release create ${release} --title ${release} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
+          GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${release}
           for i in .zst .sig .tar; do
-          #find -iname *$i -exec gh release upload ${release} --repo ${GITHUB_REPOSITORY} --clobber {} \;
-          find -iname *$i -exec gh release upload ${release} --repo gitbigbarna/pkgbuild --clobber {} \;
+          find -iname *$i -exec gh release upload ${release} --repo ${GITHUB_REPOSITORY} --clobber {} \;
           done
           
       ## Tmate ##
@@ -82,19 +69,17 @@ jobs:
           eval `ssh-agent -s`
           ssh-add /home/runner/.ssh/github_actions
           ssh-keyscan -t rsa -p ${{ secrets.PKGBUILD_PORT }} ${{ secrets.PKGBUILD_HOST }} >> /home/runner/.ssh/known_hosts
-          #gitfolder=$(echo ${{ github.event.client_payload.url }} | rev | cut -d "/" -f1 | rev)
-          #cd $gitfolder
-          if [ "${{ github.event.client_payload.branch }}" = "stable" ];then branch=stable; else branch=testing; fi
-          echo $branch
-          echo "test -e $i && rsync -vaPpz -e "ssh -p ${{ secrets.PKGBUILD_PORT }}" $i ${{ secrets.PKGBUILD_USER }}@${{ secrets.PKGBUILD_HOST }}:${{ secrets.PKGBUILD_DIR_TESTING }}/$branch/x86_64"
+          gitfolder=$(echo ${{ github.event.client_payload.url }} | rev | cut -d "/" -f1 | rev)
+          cd $gitfolder
+          if [ ${{ github.event.client_payload.branch }} = "stable" ];then branch=stable; else branch=testing; fi
           for i in *.zst *.sig *.tar; do 
           test -e $i && rsync -vaPpz -e "ssh -p ${{ secrets.PKGBUILD_PORT }}" $i ${{ secrets.PKGBUILD_USER }}@${{ secrets.PKGBUILD_HOST }}:${{ secrets.PKGBUILD_DIR_TESTING }}/$branch/x86_64
           done
           exit 0
           
-      ## Tmate ##
-      #- name: Setup tmate session
-      #  uses: mxschmitt/action-tmate@v3 
+        ## Tmate ##
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3 
           
         
 #      - name: upload-cdn77
