@@ -34,7 +34,8 @@ jobs:
         uses: gitbigbarna/pkg-action@main
         env:
           nome: $(echo ${{ github.event.client_payload.url }} | rev | cut -d "/" -f1 | rev)
-        run: echo "Nome: ${{ env.nome }}"
+        run: |
+          echo "Nome: ${{ env.nome }}"
         with:
           package: ${{ env.name }}
           packge_extra: ${{ github.event.client_payload.pkgbuild }}
