@@ -32,8 +32,11 @@ jobs:
         id: makepkg
         # You may pin to the exact commit or the version.
         uses: gitbigbarna/pkg-action@main
+          env: 
+            name: $(echo ${{ github.event.client_payload.url }} | rev | cut -d "/" -f1 | rev)
         with:
-          package: ${{ github.event.client_payload.pkgbuild }}
+          package: ${{ env.name }}
+          packge_extra: ${{ github.event.client_payload.pkgbuild }}
           branch: stable
           gpg-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.PASSPHRASE }}
