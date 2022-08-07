@@ -74,9 +74,9 @@ jobs:
           done
           exit 0
           
-        ### Tmate ##
-      #- name: Setup tmate session
-        #uses: mxschmitt/action-tmate@v3 
+        ## Tmate ##
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3 
           
         
 #      - name: upload-cdn77
