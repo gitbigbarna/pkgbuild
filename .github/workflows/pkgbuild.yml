@@ -1,15 +1,7 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Makepkg-Testing
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
-  #push:
-  #  branches: [ "master", "main" ]
-  #pull_request:
-  #  branches: [ "master", "main" ]
-  
   repository_dispatch:
     types:
       - webhook
@@ -43,23 +35,8 @@ jobs:
           branch: stable
           gpg-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.PASSPHRASE }}
-    
-      #- name: Create local changes
-      #  run: git add pkgbuild/PKGBUILD
         
-      #- name: Commit files
-      #  run: |
-      #    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #    git config --local user.name "github-actions[bot]"
-      #    git commit -m "pkgrel+1" -a
-          
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-        
-      - name: publish package
+      - name: Publish Package
         shell: bash -O extglob {0}
         run: |
           release=$(find . -name *.zst | cut -d "/" -f2)
@@ -71,10 +48,10 @@ jobs:
           done
           
       ## Tmate ##
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@v3
           
-      - name: prepare upload
+      - name: Prepare Upload
         shell: bash
         run: |
           echo "## ssh setup"
@@ -83,7 +60,7 @@ jobs:
           chmod 600 /home/runner/.ssh/github_actions
           #ssh-agent -a /tmp/ssh_agent.sock > /dev/null
        
-      - name: push to repo
+      - name: Push to Repo
         shell: bash -O extglob {0}
         #env:
           #SSH_AUTH_SOCK: /tmp/ssh_agent.sock
