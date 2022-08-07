@@ -37,9 +37,8 @@ jobs:
           gpg-passphrase: ${{ secrets.PASSPHRASE }}
         
       - name: Publish Package
-        shell: bash -O extglob {0}
+        shell: bash -x
         run: |
-          ::debug::{message}
           release=$(find . -name *.zst | cut -d "/" -f2)
           echo ${{ github.token }} | gh auth login --with-token
           gitfolder=$(find -type f -name PKGBUILD | sed 's/PKGBUILD//')
@@ -56,7 +55,7 @@ jobs:
       #  uses: mxschmitt/action-tmate@v3
           
       - name: Prepare Upload
-        shell: bash
+        shell: bash -x
         run: |
           echo "## ssh setup"
           mkdir -p /home/runner/.ssh
@@ -65,11 +64,8 @@ jobs:
           #ssh-agent -a /tmp/ssh_agent.sock > /dev/null
        
       - name: Push to Repo
-        shell: bash -O extglob {0}
-        #env:
-          #SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        shell: bash -x
         run: |
-          ::debug::{message}
           echo "${{ secrets.PKGBUILD_KEY }}" >> /home/runner/.ssh/github_actions
           eval `ssh-agent -s`
           ssh-add /home/runner/.ssh/github_actions
