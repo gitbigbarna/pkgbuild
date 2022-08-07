@@ -77,12 +77,12 @@ jobs:
           for i in *.zst *.sig *.tar; do
           test -e $i && mv $i $(echo $i | sed 's/:/./') && 
           test -e $i && rsync -vaPpz -e "ssh -p ${{ secrets.PKGBUILD_PORT }}" $i ${{ secrets.PKGBUILD_USER }}@${{ secrets.PKGBUILD_HOST }}:${{ secrets.PKGBUILD_DIR_TESTING }}/$branch/x86_64
-          #done
-          #exit 0
+          done
+          exit 0
           
         ## Tmate ##
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3 
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@v3 
           
         
 #      - name: upload-cdn77
